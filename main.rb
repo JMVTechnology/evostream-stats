@@ -14,7 +14,10 @@ end
 # Connect to MongoDB
 Mongoid.load!('config/mongoid.yml', :production)
 
-Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
+Dir[
+  File.dirname(__FILE__) + '/models/*.rb',
+  File.dirname(__FILE__) + '/lib/*.rb'
+].each {|file| require file }
 
 
 # Display default front page
@@ -44,98 +47,14 @@ get '/api/online' do
 end
 
 # Retrieve history of connected users by proxy
-# - Get all outStreamCreated and outStreamClosed events
-# - Sort by timestamp
-# - Get timestamp, nearIp
-#
-# Returns JSON:
-# [
-# { key: "10.13.37.1", values: [ [ timetstamp, count ] , [ timestamp, count ] ] },
-# ]
 get '/api/stats/proxy' do
-  stats = []
-  proxies = JsonData.proxies
-  events = JsonData.all_out_stream_by_timestamp
-
-  h = {}
-  events.each do |event|
-    # Javascript timestamp is in ms, so multiply by 1000
-    timestamp = event['data']['timestamp'] * 1000
-
-    proxies.each do |proxy|
-      # Get last count, initialize with 0 if not existent
-      if h[proxy]
-        count = h[proxy].last[1]
-      else
-        count = 0
-      end
-
-      # In case the entry is concerning this proxy
-      # increment/decrement counter accordingly
-      if event['data']['payload']['nearIp'] == proxy
-        count += 1 if event['data']['type'] == 'outStreamCreated'
-        count -= 1 if event['data']['type'] == 'outStreamClosed'
-      end
-
-      if h[proxy]
-        h[proxy] << [ timestamp, count ] unless h[proxy].last[0] == timestamp
-      else
-        h[proxy] = [[ timestamp, count ]]
-      end
-    end
-  end
-
-  # Convert hash to stats array
-  h.each { |proxy, values| stats << { key: proxy, values: values } }
-
+  stats = generate_stats_array(JsonData.proxies, 'nearIp')
   JSON.pretty_generate(stats)
 end
 
 # Retrieve history of connected users by quality
-# - Get all outStreamCreated and outStreamClosed events
-# - Sort by timestamp
-# - Get timestamp, name
-#
-# Returns JSON:
-# [
-# { key: "sublan_360p500k", values: [ [ timetstamp, count ] , [ timestamp, count ] ] },
-# ]
 get '/api/stats/quality' do
-  stats = []
-  qualities = JsonData.qualities
-  events = JsonData.all_out_stream_by_timestamp
-
-  h = {}
-  events.each do |event|
-    # Javascript timestamp is in ms, so multiply by 1000
-    timestamp = event['data']['timestamp'] * 1000
-
-    qualities.each do |quality|
-      # Get last count, initialize with 0 if not existent
-      if h[quality]
-        count = h[quality].last[1]
-      else
-        count = 0
-      end
-
-      # In case the entry is concerning this quality
-      # increment/decrement counter accordingly
-      if event['data']['payload']['name'] == quality
-        count += 1 if event['data']['type'] == 'outStreamCreated'
-        count -= 1 if event['data']['type'] == 'outStreamClosed'
-      end
-
-      if h[quality]
-        h[quality] << [ timestamp, count ] unless h[quality].last[0] == timestamp
-      else
-        h[quality] = [[ timestamp, count ]]
-      end
-    end
-  end
-
-  # Convert hash to stats array
-  h.each { |quality, values| stats << { key: quality, values: values } }
-
+  stats = generate_stats_array(JsonData.qualities, 'name')
   JSON.pretty_generate(stats)
 end
 
