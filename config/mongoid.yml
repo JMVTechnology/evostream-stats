@@ -1,0 +1,5 @@
+production:
+  sessions:
+    default:
+      database: sublan
+      hosts: [ 'localhost:27017' ]

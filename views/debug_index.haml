@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %meta{charset: 'utf-8'}/
+    %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
+
+  %body.with-3d-shadow.with-transitions
+    %p
+      %a{href: '/api/debug/query'} List all entries (and apply custom filters)
+      |
+      %a{href: '/api/debug/stats'} Get debug statistics
+    %p
+      Logs stored: #{@count}
+    %p
+      - if @last
+        Latest entry:
+        = @last.created_at
+        %div.debug
+          %pre
+            = preserve do
+              = JSON.pretty_generate(@last.data)

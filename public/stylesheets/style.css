@@ -1,0 +1,15 @@
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+#chart-proxy, #chart-quality {
+  height: 250px;
+}
+
+.debug {
+  color: #ff0000;
+}

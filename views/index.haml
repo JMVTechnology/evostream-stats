@@ -1,0 +1,29 @@
+!!!
+%html
+  %head
+    %meta{charset: 'utf-8'}/
+    %link{href: '/stylesheets/nv.d3.css', rel: 'stylesheet', type: 'text/css'}/
+    %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
+
+  %body.with-3d-shadow.with-transitions
+    %div
+      %svg#chart-proxy
+    %div
+      %svg#chart-quality
+
+    %script{src: '/javascripts/jquery.min.js'}
+    %script{src: '/javascripts/nvd3/d3.v3.min.js'}
+    %script{src: '/javascripts/nvd3/nv.d3.min.js'}
+    %script{src: '/javascripts/nvd3/utils.js'}
+    %script{src: '/javascripts/nvd3/tooltip.js'}
+    %script{src: '/javascripts/nvd3/interactiveLayer.js'}
+    %script{src: '/javascripts/nvd3/models/legend.js'}
+    %script{src: '/javascripts/nvd3/models/axis.js'}
+    %script{src: '/javascripts/nvd3/models/scatter.js'}
+    %script{src: '/javascripts/nvd3/models/stackedArea.js'}
+    %script{src: '/javascripts/nvd3/models/stackedAreaChart.js'}
+    %script{src: '/javascripts/chart.js'}
+
+    :javascript
+      var chartProxy = new Chart('proxy');
+      var chartQuality = new Chart('quality');
