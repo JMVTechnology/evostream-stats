@@ -41,13 +41,13 @@ var Chart = function(Name) {
     });
   };
 
-  var _init = function() {
+  var initialize = function() {
     console.info("creating graph '" + name + "'");
     nv.addGraph(createChart);
     update();
   }
 
-  _init();
+  initialize();
 
   return {
     update: update
