@@ -1,5 +1,4 @@
-var Chart = function(Name) {
-  var name = Name;
+var Chart = function(name) {
   var chart;
 
   var colors = d3.scale.category20();
