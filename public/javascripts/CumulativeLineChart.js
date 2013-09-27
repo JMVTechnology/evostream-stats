@@ -1,4 +1,4 @@
-var CumulativeLineChart = function(name) {
+var CumulativeLineChart = function(name, interval) {
   var chart;
 
   var colors = d3.scale.category20();
@@ -36,7 +36,7 @@ var CumulativeLineChart = function(name) {
 
         chart.update;
       },
-      complete: setTimeout(function() { update(name, chart); }, 1000),
+      complete: setTimeout(function() { update(name, chart); }, interval),
     });
   };
 
