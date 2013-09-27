@@ -36,7 +36,7 @@ var CumulativeLineChart = function(name, interval) {
 
         chart.update;
       },
-      complete: setTimeout(function() { update(name, chart); }, interval),
+      complete: setTimeout(function() { update(); }, interval),
     });
   };
 
