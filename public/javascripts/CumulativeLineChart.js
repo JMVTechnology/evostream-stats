@@ -6,7 +6,7 @@ var CumulativeLineChart = function(name, interval) {
 
   var createChart = function() {
     chart = nv.models.cumulativeLineChart()
-              // .useInteractiveGuideline(true)
+              .useInteractiveGuideline(true)
               .x(function(d) { return d[0] })
               .y(function(d) { return d[1] })
               .color(keyColor)
