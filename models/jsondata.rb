@@ -108,12 +108,14 @@ class JsonData
 
   def self.average_uptime_by_ip
     total_uptime = 0
+    average_uptime = 0
 
     c = closed_clients
     c.each do |client|
       total_uptime += uptime_by_client(client)
     end
 
-    total_uptime / c.count
+    average_uptime = total_uptime / c.count if c.count > 0
+    average_uptime
   end
 end
