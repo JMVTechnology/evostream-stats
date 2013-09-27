@@ -22,8 +22,8 @@
     %script{src: '/javascripts/nvd3/models/scatter.js'}
     %script{src: '/javascripts/nvd3/models/stackedArea.js'}
     %script{src: '/javascripts/nvd3/models/stackedAreaChart.js'}
-    %script{src: '/javascripts/chart.js'}
+    %script{src: '/javascripts/StackedAreaChart.js'}
 
     :javascript
-      var chartProxy = new Chart('proxy');
-      var chartQuality = new Chart('quality');
+      var chartProxy = new StackedAreaChart('proxy');
+      var chartQuality = new StackedAreaChart('quality');

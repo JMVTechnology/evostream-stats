@@ -1,4 +1,4 @@
-var Chart = function(name) {
+var StackedAreaChart = function(name) {
   var chart;
 
   var colors = d3.scale.category20();
