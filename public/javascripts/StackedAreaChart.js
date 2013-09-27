@@ -1,5 +1,6 @@
 var StackedAreaChart = function(name, interval) {
   var chart;
+  var frozen = false;
 
   var colors = d3.scale.category20();
   var keyColor = function(d, i) {return colors(d.key)};
@@ -24,6 +25,9 @@ var StackedAreaChart = function(name, interval) {
   }
 
   var update = function() {
+    if (frozen)
+      return;
+
     $.ajax({
       url: '/api/stats/' + name,
       type: 'GET',
@@ -40,6 +44,13 @@ var StackedAreaChart = function(name, interval) {
     });
   };
 
+  var toggleFreeze = function() {
+    frozen = !frozen;
+
+    if (!frozen)
+      update();
+  }
+
   var initialize = function() {
     console.info("creating graph '" + name + "'");
     nv.addGraph(createChart);
@@ -49,6 +60,7 @@ var StackedAreaChart = function(name, interval) {
   initialize();
 
   return {
-    update: update
+    update: update,
+    toggleFreeze: toggleFreeze,
   }
 }
