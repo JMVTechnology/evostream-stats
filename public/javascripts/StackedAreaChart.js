@@ -36,7 +36,7 @@ var StackedAreaChart = function(name, interval) {
       success: function(data) {
         d3.select('#chart-' + name)
           .datum(data)
-          .transition().duration(300)
+          .transition().duration(0)
           .call(chart);
 
         chart.update;
