@@ -21,6 +21,10 @@ class JsonData
     created.count - closed.count
   end
 
+  def self.since(seconds=0)
+    return all if seconds == 0
+    where(:created_at.gte => (Time.now - seconds))
+  end
 
   def self.proxies
     created.distinct('data.payload.nearIp')

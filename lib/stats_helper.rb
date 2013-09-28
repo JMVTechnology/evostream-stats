@@ -7,9 +7,9 @@
 # [
 # { key: "<key>", values: [ [ timetstamp, count ] , [ timestamp, count ] ] },
 # ]
-def generate_stats_array(elements, field)
+def generate_stats_array(elements, field, timespan=0)
   stats = []
-  events = JsonData.all_out_stream_by_timestamp
+  events = JsonData.since(timespan).all_out_stream_by_timestamp
 
   h = {}
   events.each do |event|
