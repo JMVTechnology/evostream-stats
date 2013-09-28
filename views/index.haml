@@ -6,6 +6,7 @@
     %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
 
   %body.with-3d-shadow.with-transitions
+    %button#freeze freeze/unfreeze
     %div
       %svg#chart-proxy
     %div
@@ -27,3 +28,8 @@
     :javascript
       var chartProxy = new StackedAreaChart('proxy', 5000);
       var chartQuality = new StackedAreaChart('quality', 5000);
+
+      $('#freeze').click(function(event) {
+        chartProxy.toggleFreeze();
+        chartQuality.toggleFreeze();
+      });
