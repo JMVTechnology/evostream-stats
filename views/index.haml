@@ -6,7 +6,7 @@
     %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
 
   %body.with-3d-shadow.with-transitions
-    %button#freeze freeze/unfreeze
+    %input{type: 'checkbox', name: 'freeze'} freeze
     %input{type: 'radio', name: 'timespan', value: 60} 1min
     %input{type: 'radio', name: 'timespan', value: 300} 5min
     %input{type: 'radio', name: 'timespan', value: 600} 10min
@@ -36,7 +36,7 @@
       var chartProxy = new StackedAreaChart('proxy', 5000);
       var chartQuality = new StackedAreaChart('quality', 5000);
 
-      $('#freeze').click(function(event) {
+      $('input[name=freeze]:checkbox').change(function () {
         chartProxy.toggleFreeze();
         chartQuality.toggleFreeze();
       });
