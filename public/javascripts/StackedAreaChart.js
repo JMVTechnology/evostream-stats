@@ -2,6 +2,7 @@ var StackedAreaChart = function(name, interval) {
   var chart;
   var frozen = false;
   var timespan = 0;
+  var currentDataLength = 0;
 
   var colors = d3.scale.category20();
   var keyColor = function(d, i) {return colors(d.key)};
@@ -34,12 +35,22 @@ var StackedAreaChart = function(name, interval) {
       type: 'GET',
       dataType: 'json',
       success: function(data) {
+        if (data.length > 0 && data[0].values.length == currentDataLength)
+          transition = 300;
+        else
+          transition = 0;
+
         d3.select('#chart-' + name)
           .datum(data)
-          .transition().duration(0)
+          .transition().duration(transition)
           .call(chart);
 
         chart.update;
+
+        if (data.length > 0)
+          currentDataLength = data[0].values.length;
+        else
+          currentDataLength = 0;
       },
       complete: setTimeout(function() { update(); }, interval),
     });
