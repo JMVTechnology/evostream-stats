@@ -32,18 +32,18 @@ end
 #   "total": 4
 # }
 get '/api/online' do
-  data = { proxies: {}, qualities: {} }
+  stats = { proxies: {}, qualities: {} }
 
   # get clients online by proxy
-  JsonData.proxies.each { |proxy| data[:proxies][proxy] = JsonData.online_count_by_proxy(proxy) }
+  JsonData.proxies.each { |proxy| stats[:proxies][proxy] = JsonData.online_count_by_proxy(proxy) }
 
   # get clients online by quality
-  JsonData.qualities.each { |quality| data[:qualities][quality] = JsonData.online_count_by_quality(quality) }
+  JsonData.qualities.each { |quality| stats[:qualities][quality] = JsonData.online_count_by_quality(quality) }
 
   # get total clients online
-  data[:total] = data[:proxies].values.inject { |sum,x| sum + x }
+  stats[:total] = stats[:proxies].values.inject { |sum,x| sum + x }
 
-  JSON.pretty_generate(data)
+  JSON.pretty_generate(stats)
 end
 
 # Retrieve history of connected users by proxy
