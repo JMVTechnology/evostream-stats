@@ -130,3 +130,23 @@ post '/api/collect' do
     return [ 500, 'error storing data']
   end
 end
+
+
+# Output fake data
+fakedata = nil
+get '/api/debug/fake' do
+  max_length = (params[:timespan] || 540).to_i / 60
+  max_length = 9999 if max_length == 0
+  count = (params[:count] || 5).to_i
+  fakedata ||= Array.new(count)
+
+  (1..count).each do |i|
+    fakedata[i - 1] ||= {}
+    fakedata[i - 1][:key] = "10.13.37.#{i}"
+    fakedata[i - 1][:values] ||= []
+    fakedata[i - 1][:values].shift while(fakedata[i - 1][:values].length > max_length)
+    fakedata[i - 1][:values].push([ Time.now.to_i * 1000, rand(20) + 1 ])
+  end
+
+  JSON.pretty_generate(fakedata)
+end

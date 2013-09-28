@@ -88,8 +88,8 @@
       var onlineStatsHeaderTemplate = Handlebars.compile($('#online-stats-header-template').html());
       var onlineStatsLiTemplate = Handlebars.compile($('#online-stats-li-template').html());
 
-      var chartProxy = new StackedAreaChart('proxy', 5000);
-      var chartQuality = new StackedAreaChart('quality', 5000);
+      var chartProxy = new StackedAreaChart('proxy', 2000);
+      // var chartQuality = new StackedAreaChart('quality', 5000);
 
       $('#freeze-btn').click(function () {
         chartProxy.toggleFreeze();

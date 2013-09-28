@@ -32,6 +32,7 @@ var StackedAreaChart = function(name, interval) {
 
     $.ajax({
       url: '/api/stats/' + name + '?timespan=' + timespan,
+      url: '/api/debug/fake?timespan=' + timespan,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
