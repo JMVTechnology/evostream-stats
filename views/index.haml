@@ -8,23 +8,54 @@
     %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
 
   %body.with-3d-shadow.with-transitions
-    %input{type: 'checkbox', name: 'freeze'} freeze
-    %input{type: 'radio', name: 'timespan', value: 60} 1min
-    %input{type: 'radio', name: 'timespan', value: 300} 5min
-    %input{type: 'radio', name: 'timespan', value: 600} 10min
-    %input{type: 'radio', name: 'timespan', value: 1800} 30min
-    %input{type: 'radio', name: 'timespan', value: 3600} 60min
-    %input{type: 'radio', name: 'timespan', value: 0, checked: true} all
 
-    %div
-      %svg#chart-proxy
-    %div
-      %svg#chart-quality
+    %div.row
+      %div.col-md-12
+        %div.btn-group
+          %button#freeze-btn{class: 'btn btn-default', 'data-toggle' => 'button'} Freeze Charts
+          %div.btn-group
+            %button{class: 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown'}
+              Show data:
+              %span#current-timespan all
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: '#', onclick: 'setTimespan(60)'} 1min
+              %li
+                %a{href: '#', onclick: 'setTimespan(300)'} 5min
+              %li
+                %a{href: '#', onclick: 'setTimespan(600)'} 10min
+              %li
+                %a{href: '#', onclick: 'setTimespan(1800)'} 30min
+              %li
+                %a{href: '#', onclick: 'setTimespan(3600)'} 60min
+              %li.divider
+              %li
+                %a{href: '#', onclick: 'setTimespan(0)'} all
 
-    %p
-      %div#stats-total
-      %div#stats-proxies
-      %div#stats-qualities
+    %div.row
+      %div.col-md-12
+        %h3 Connections by Proxy
+    %div.row
+      %div.col-md-12
+        %svg#chart-proxy
+    %div.row
+      %div.col-md-12
+        %h3  Connections by Quality
+    %div.row
+      %div.col-md-12
+        %svg#chart-quality
+
+    %div.row
+      %div.col-md-12
+        %h3 Connection Overview
+    %div.row
+      %div.col-md-3
+        %div#stats-total
+      %div.col-md-3
+        %div#stats-proxies
+      %div.col-md-3
+        %div#stats-qualities
 
     %script{src: '/javascripts/jquery.min.js'}
     %script{src: '/javascripts/handlebars.js'}
@@ -44,11 +75,13 @@
     / Handlebar templates
     %script{id: 'online-stats-header-template', type: 'text/x-handlebars-template'}
       %h4 {{title}}
-      %ul {{{list}}}
+      %ul.list-group {{{list}}}
 
     %script{id: 'online-stats-li-template', type: 'text/x-handlebars-template'}
-      %li
-        {{key}}: {{value}}
+      %li.list-group-item
+        %span.badge {{value}}
+        {{key}}
+
 
     :javascript
       // compile handlebar templates
@@ -58,15 +91,21 @@
       var chartProxy = new StackedAreaChart('proxy', 5000);
       var chartQuality = new StackedAreaChart('quality', 5000);
 
-      $('input[name=freeze]:checkbox').change(function () {
+      $('#freeze-btn').click(function () {
         chartProxy.toggleFreeze();
         chartQuality.toggleFreeze();
       });
 
-      $('input[name=timespan]:radio').change(function () {
-        chartProxy.setTimespan($(this).val());
-        chartQuality.setTimespan($(this).val());
-      });
+
+      function setTimespan(timespan) {
+        chartProxy.setTimespan(timespan);
+        chartQuality.setTimespan(timespan);
+
+        if (timespan == 0)
+          $('#current-timespan').html('all');
+        else
+          $('#current-timespan').html(timespan / 60 + 'min');
+      }
 
 
       updateTextStats(5000);
