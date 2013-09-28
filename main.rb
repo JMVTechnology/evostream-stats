@@ -122,7 +122,7 @@ post '/api/collect' do
     return [ 400, 'invalid json' ]
   end
 
-  data = JsonData.new(created_at: DateTime.now, data: json)
+  data = JsonData.new(data: json)
 
   if data.save
     return [ 201, 'data stored' ]

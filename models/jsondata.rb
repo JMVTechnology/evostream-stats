@@ -1,7 +1,8 @@
 class JsonData
   include Mongoid::Document
+  include Mongoid::Timestamps
+
   field :data,       type: Hash
-  field :created_at, type: DateTime
 
   def self.created
     where(
