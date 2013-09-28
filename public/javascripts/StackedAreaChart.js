@@ -66,6 +66,7 @@ var StackedAreaChart = function(name, interval) {
   var setTimespan = function(sec) {
     console.log('Setting timespan to: ' + sec)
     timespan = sec;
+    update();
   }
 
   var initialize = function() {
