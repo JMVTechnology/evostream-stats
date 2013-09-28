@@ -48,13 +48,13 @@ end
 
 # Retrieve history of connected users by proxy
 get '/api/stats/proxy' do
-  stats = generate_stats_array(JsonData.proxies, 'nearIp', params[:timespan])
+  stats = generate_stats_array(JsonData.proxies, 'nearIp', params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end
 
 # Retrieve history of connected users by quality
 get '/api/stats/quality' do
-  stats = generate_stats_array(JsonData.qualities, 'name', params[:timespan])
+  stats = generate_stats_array(JsonData.qualities, 'name', params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end
 
