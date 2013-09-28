@@ -1,6 +1,7 @@
 var StackedAreaChart = function(name, interval) {
   var chart;
   var frozen = false;
+  var timespan = 0;
 
   var colors = d3.scale.category20();
   var keyColor = function(d, i) {return colors(d.key)};
@@ -29,7 +30,7 @@ var StackedAreaChart = function(name, interval) {
       return;
 
     $.ajax({
-      url: '/api/stats/' + name,
+      url: '/api/stats/' + name + '?timespan=' + timespan,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -51,6 +52,11 @@ var StackedAreaChart = function(name, interval) {
       update();
   }
 
+  var setTimespan = function(sec) {
+    console.log('Setting timespan to: ' + sec)
+    timespan = sec;
+  }
+
   var initialize = function() {
     console.info("creating graph '" + name + "'");
     nv.addGraph(createChart);
@@ -62,5 +68,6 @@ var StackedAreaChart = function(name, interval) {
   return {
     update: update,
     toggleFreeze: toggleFreeze,
+    setTimespan: setTimespan,
   }
 }
