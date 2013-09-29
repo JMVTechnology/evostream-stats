@@ -49,9 +49,9 @@
 
       %ul{class: 'nav nav-tabs'}
         %li.active
-          %a{href: '#stats-online', onclick: 'updateTextStats("online");'} Online
+          %a{href: '#stats-online', 'data-toggle' => 'tab', onclick: 'updateTextStats("online");'} Online
         %li
-          %a{href: '#stats-total', onclick: 'updateTextStats("total");'} Total
+          %a{href: '#stats-total', 'data-toggle' => 'tab', onclick: 'updateTextStats("total");'} Total
 
       %div.tab-content
         %div.col-md-12
@@ -122,11 +122,6 @@
       }
 
       function updateTextStats(what) {
-        $('ul.nav-tabs li a').click(function() {
-          $('ul.nav-tabs li.active').removeClass('active')
-          $(this).parent('li').addClass('active')
-        });
-
         $('#stats-title').html('Connection Overview (' + what + ')');
         textStats.setWhat(what);
       }
