@@ -32,16 +32,25 @@ end
 #   "total": 4
 # }
 get '/api/online' do
-  stats = { proxies: {}, qualities: {} }
+  stats = { proxies: {}, qualities: {}, overall: {} }
 
   # get clients online by proxy
-  JsonData.proxies.each { |proxy| stats[:proxies][proxy] = JsonData.online_count_by_proxy(proxy) }
+  JsonData.proxies.each do |proxy|
+    stats[:proxies][proxy] = {}
+    stats[:proxies][proxy][:online] = JsonData.online_count_by_proxy(proxy)
+    stats[:proxies][proxy][:total] = JsonData.created_by_proxy(proxy).count
+  end
 
   # get clients online by quality
-  JsonData.qualities.each { |quality| stats[:qualities][quality] = JsonData.online_count_by_quality(quality) }
+  JsonData.qualities.each do |quality|
+    stats[:qualities][quality] = {}
+    stats[:qualities][quality][:online] = JsonData.online_count_by_quality(quality)
+    stats[:qualities][quality][:total] = JsonData.created_by_quality(quality).count
+  end
 
   # get total clients online
-  stats[:total] = stats[:proxies].values.inject { |sum,x| sum + x }
+  stats[:overall][:online] = JsonData.online_count
+  stats[:overall][:total] = JsonData.created.count
 
   JSON.pretty_generate(stats)
 end
