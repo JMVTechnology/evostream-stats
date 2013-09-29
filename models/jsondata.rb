@@ -43,6 +43,17 @@ class JsonData
     created_by_proxy(proxy).count - closed_by_proxy(proxy).count
   end
 
+  def self.proxy_active?(proxy)
+    count = where(
+      'data.payload.customData' => 'proxy',
+      'data.payload.nearIp' => proxy,
+      :created_at.gte => (Time.now - 30)
+    ).count
+
+    return true if count > 0
+    false
+  end
+
 
   def self.qualities
     created.distinct('data.payload.name')

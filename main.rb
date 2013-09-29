@@ -37,6 +37,7 @@ get '/api/online' do
   # get clients online by proxy
   JsonData.proxies.each do |proxy|
     stats[:proxies][proxy] = {}
+    stats[:proxies][proxy][:active] = JsonData.proxy_active?(proxy)
     stats[:proxies][proxy][:online] = JsonData.online_count_by_proxy(proxy)
     stats[:proxies][proxy][:total] = JsonData.created_by_proxy(proxy).count
   end
@@ -49,8 +50,9 @@ get '/api/online' do
   end
 
   # get total clients online
-  stats[:overall][:online] = JsonData.online_count
-  stats[:overall][:total] = JsonData.created.count
+  stats[:overall][:viewers] = {}
+  stats[:overall][:viewers][:online] = JsonData.online_count
+  stats[:overall][:viewers][:total] = JsonData.created.count
 
   JSON.pretty_generate(stats)
 end

@@ -51,7 +51,7 @@
         %h3 Connection Overview
     %div.row
       %div.col-md-3
-        %div#stats-total
+        %div#stats-overall
       %div.col-md-3
         %div#stats-proxies
       %div.col-md-3
@@ -80,7 +80,7 @@
     %script{id: 'online-stats-li-template', type: 'text/x-handlebars-template'}
       %li.list-group-item
         %span.badge {{value}}
-        {{key}}
+        %span{style: 'color: {{color}}'} {{key}}
 
 
     :javascript
@@ -116,19 +116,21 @@
           type: 'GET',
           dataType: 'json',
           success: function(data) {
-            $.each(data, function(key, value) {
-              var list = ''
-              if (isNaN(value)) {
-                $.each(value, function(name, count) {
-                  list += onlineStatsLiTemplate({key: name, value: count})
-                });
-              }
-              else {
-                list += onlineStatsLiTemplate({key: 'viewers', value: value})
-              }
 
-              var html = onlineStatsHeaderTemplate({title: key, list: list})
-              $('#stats-' + key).html(html);
+            $.each(data, function(title, section) {
+              var list = ''
+
+              $.each(section, function(name, stats) {
+                if (stats['active'] == false)
+                  color = '#ff0000';
+                else
+                  color = '#000000';
+
+                list += onlineStatsLiTemplate({key: name, value: stats['total'], color: color});
+              });
+
+              var html = onlineStatsHeaderTemplate({title: title, list: list})
+              $('#stats-' + title).html(html);
             });
           },
           complete: setTimeout(function() { updateTextStats(interval); }, interval),
