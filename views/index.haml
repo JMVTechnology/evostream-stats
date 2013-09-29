@@ -8,61 +8,61 @@
     %link{href: '/stylesheets/style.css', rel: 'stylesheet', type: 'text/css'}/
 
   %body.with-3d-shadow.with-transitions
-
-    %div.row
-      %div.col-md-12
-        %div.btn-group
-          %button#freeze-btn{class: 'btn btn-default', 'data-toggle' => 'button'} Freeze Charts
-          %div.btn-group
-            %button{class: 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown'}
-              Show data:
-              %span#current-timespan all
-              %span.caret
-            %ul.dropdown-menu
-              %li
-                %a{href: '#', onclick: 'setTimespan(60)'} 1min
-              %li
-                %a{href: '#', onclick: 'setTimespan(300)'} 5min
-              %li
-                %a{href: '#', onclick: 'setTimespan(600)'} 10min
-              %li
-                %a{href: '#', onclick: 'setTimespan(1800)'} 30min
-              %li
-                %a{href: '#', onclick: 'setTimespan(3600)'} 60min
-              %li.divider
-              %li
-                %a{href: '#', onclick: 'setTimespan(0)'} all
-
-    %div.row
-      %div.col-md-12
-        %h3 Connections by Proxy
-    %div.row
-      %div.col-md-12
-        %svg#chart-proxy
-    %div.row
-      %div.col-md-12
-        %h3  Connections by Quality
-    %div.row
-      %div.col-md-12
-        %svg#chart-quality
-
-
-    %ul{class: 'nav nav-tabs'}
-      %li.active
-        %a{href: '#stats-online', onclick: 'updateTextStats("online");'} Online
-      %li
-        %a{href: '#stats-total', onclick: 'updateTextStats("total");'} Total
-
-    %div.tab-content
-      %div.col-md-12
-        %h3#stats-title Connection Overview (online)
+    %div.container
       %div.row
-        %div.col-md-3
-          %div#stats-overall
-        %div.col-md-3
-          %div#stats-proxies
-        %div.col-md-3
-          %div#stats-qualities
+        %div.col-md-12
+          %div.btn-group
+            %button#freeze-btn{class: 'btn btn-default', 'data-toggle' => 'button'} Freeze Charts
+            %div.btn-group
+              %button{class: 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown'}
+                Show data:
+                %span#current-timespan all
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{href: '#', onclick: 'setTimespan(60)'} 1min
+                %li
+                  %a{href: '#', onclick: 'setTimespan(300)'} 5min
+                %li
+                  %a{href: '#', onclick: 'setTimespan(600)'} 10min
+                %li
+                  %a{href: '#', onclick: 'setTimespan(1800)'} 30min
+                %li
+                  %a{href: '#', onclick: 'setTimespan(3600)'} 60min
+                %li.divider
+                %li
+                  %a{href: '#', onclick: 'setTimespan(0)'} all
+
+      %div.row
+        %div.col-md-12
+          %h3 Connections by Proxy
+      %div.row
+        %div.col-md-12
+          %svg#chart-proxy
+      %div.row
+        %div.col-md-12
+          %h3  Connections by Quality
+      %div.row
+        %div.col-md-12
+          %svg#chart-quality
+
+
+      %ul{class: 'nav nav-tabs'}
+        %li.active
+          %a{href: '#stats-online', onclick: 'updateTextStats("online");'} Online
+        %li
+          %a{href: '#stats-total', onclick: 'updateTextStats("total");'} Total
+
+      %div.tab-content
+        %div.col-md-12
+          %h3#stats-title Connection Overview (online)
+        %div.row
+          %div.col-md-3
+            %div#stats-overall
+          %div.col-md-3
+            %div#stats-proxies
+          %div.col-md-3
+            %div#stats-qualities
 
     %script{src: '/javascripts/jquery.min.js'}
     %script{src: '/javascripts/handlebars.js'}
