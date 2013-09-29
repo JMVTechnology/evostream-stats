@@ -1,5 +1,6 @@
 var StackedAreaChart = function(name, interval) {
   var chart;
+  var timeout;
   var frozen = false;
   var timespan = 0;
   var currentDataLength = 0;
@@ -52,7 +53,10 @@ var StackedAreaChart = function(name, interval) {
         else
           currentDataLength = 0;
       },
-      complete: setTimeout(function() { update(); }, interval),
+      complete: function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(update, interval);
+      },
     });
   };
 
