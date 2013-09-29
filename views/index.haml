@@ -82,9 +82,11 @@
 
     / Handlebar templates
     %script{id: 'online-stats-header-template', type: 'text/x-handlebars-template'}
-      %table{class: 'table table-striped'}
-        %th {{title}}
-        {{{list}}}
+      %div{class: 'panel panel-default'}
+        %div.panel-heading
+          %b {{title}}
+        %table{class: 'table table-striped'}
+          {{{list}}}
 
     %script{id: 'online-stats-li-template', type: 'text/x-handlebars-template'}
       %tr
