@@ -25,21 +25,21 @@ get '/' do
   haml :index
 end
 
-# Return JSON with currently online clients by proxy and quality, as well as total
+# Return JSON with currently online clients by server and quality, as well as total
 # {
-#   "proxies": { "10.229.67.61": 4 },
+#   "servers": { "10.229.67.61": 4 },
 #   "qualities": { "sublan_360p500k": 1, "sublan_576p1000k": 1, "sublan_720p2000k": 2 },
 #   "total": 4
 # }
 get '/api/online' do
   stats = { proxies: {}, qualities: {}, overall: {} }
 
-  # get clients online by proxy
-  JsonData.proxies.each do |proxy|
+  # get clients online by server
+  JsonData.servers.each do |proxy|
     stats[:proxies][proxy] = {}
-    stats[:proxies][proxy][:active] = JsonData.proxy_active?(proxy)
-    stats[:proxies][proxy][:online] = JsonData.online_count_by_proxy(proxy)
-    stats[:proxies][proxy][:total] = JsonData.created_by_proxy(proxy).count
+    stats[:proxies][proxy][:active] = JsonData.server_active?(proxy)
+    stats[:proxies][proxy][:online] = JsonData.online_count_by_server(proxy)
+    stats[:proxies][proxy][:total] = JsonData.created_by_server(proxy).count
   end
 
   # get clients online by quality
@@ -57,14 +57,14 @@ get '/api/online' do
   JSON.pretty_generate(stats)
 end
 
-# Retrieve history of connected users by proxy
-get '/api/stats/proxy' do
-  stats = generate_stats_array(JsonData.proxies, 'nearIp', params[:timespan].to_i)
+# Retrieve history of connected users by server
+get '/api/stats/proxies' do
+  stats = generate_stats_array(JsonData.servers, 'nearIp', params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end
 
 # Retrieve history of connected users by quality
-get '/api/stats/quality' do
+get '/api/stats/qualities' do
   stats = generate_stats_array(JsonData.qualities, 'name', params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end

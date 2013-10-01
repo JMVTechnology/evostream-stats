@@ -29,25 +29,25 @@ class JsonData
     where(:created_at.gte => (Time.now - seconds))
   end
 
-  def self.proxies
+  def self.servers
     created.distinct('data.payload.nearIp')
   end
 
-  def self.created_by_proxy(proxy)
-    created.where('data.payload.nearIp' => proxy)
+  def self.created_by_server(server)
+    created.where('data.payload.nearIp' => server)
   end
 
-  def self.closed_by_proxy(proxy)
-    closed.where('data.payload.nearIp' => proxy)
+  def self.closed_by_server(server)
+    closed.where('data.payload.nearIp' => server)
   end
 
-  def self.online_count_by_proxy(proxy)
-    created_by_proxy(proxy).count - closed_by_proxy(proxy).count
+  def self.online_count_by_server(server)
+    created_by_server(server).count - closed_by_server(server).count
   end
 
-  def self.proxy_active?(proxy)
+  def self.server_active?(server)
     count = where(
-      :ip => proxy,
+      :ip => server,
       :created_at.gte => (Time.now - 30)
     ).count
 
@@ -77,7 +77,7 @@ class JsonData
     asc('data.payload.name')
   end
 
-  def self.sort_by_proxy
+  def self.sort_by_server
     asc('data.payload.nearIp')
   end
 

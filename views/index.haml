@@ -38,13 +38,13 @@
           %h3 Connections by Proxy
       %div.row
         %div.col-md-12
-          %svg#chart-proxy
+          %svg#chart-proxies
       %div.row
         %div.col-md-12
           %h3  Connections by Quality
       %div.row
         %div.col-md-12
-          %svg#chart-quality
+          %svg#chart-qualities
 
 
       %ul{class: 'nav nav-tabs'}
@@ -101,8 +101,8 @@
       var onlineStatsHeaderTemplate = Handlebars.compile($('#online-stats-header-template').html());
       var onlineStatsLiTemplate = Handlebars.compile($('#online-stats-li-template').html());
 
-      var chartProxy = new StackedAreaChart('proxy', 5000);
-      var chartQuality = new StackedAreaChart('quality', 5000);
+      var chartProxy = new StackedAreaChart('proxies', 5000);
+      var chartQuality = new StackedAreaChart('qualities', 5000);
       var textStats = new TextStats('online', 5000);
 
       $('#freeze-btn').click(function () {

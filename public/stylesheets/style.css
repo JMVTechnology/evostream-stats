@@ -6,7 +6,7 @@ text {
   font: 12px sans-serif;
 }
 
-#chart-proxy, #chart-quality {
+#chart-proxies, #chart-qualities {
   height: 250px;
 }
 
