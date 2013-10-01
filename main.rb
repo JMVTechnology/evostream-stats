@@ -133,7 +133,7 @@ post '/api/collect' do
     return [ 400, 'invalid json' ]
   end
 
-  data = JsonData.new(data: json)
+  data = JsonData.new(data: json, ip: request.ip)
 
   if data.save
     return [ 201, 'data stored' ]

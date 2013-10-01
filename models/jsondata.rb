@@ -2,7 +2,9 @@ class JsonData
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :data,       type: Hash
+  field :data, type: Hash
+  field :ip,   type: String
+
 
   def self.created
     where(
