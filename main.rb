@@ -98,19 +98,8 @@ end
 # Retrieve statistics
 get '/api/debug/stats' do
   data = {
-    clients: {},
     qualities: {},
-    average_uptime_by_ip: JsonData.average_uptime_by_ip,
   }
-
-  JsonData.closed_clients.each do |client|
-    data[:clients][client] ||= {}
-    data[:clients][client][:upTime] = JsonData.uptime_by_client(client)
-    data[:clients][client][:qualities] ||= {}
-    JsonData.qualities_by_client(client).each do |quality|
-      data[:clients][client][:qualities][quality] = JsonData.uptime_by_quality(quality).to_i
-    end
-  end
 
   JsonData.qualities.each do |quality|
     data[:qualities][quality] ||= {}
