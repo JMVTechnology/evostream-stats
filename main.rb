@@ -32,7 +32,15 @@ end
 #   "total": 4
 # }
 get '/api/online' do
-  stats = { proxies: {}, qualities: {}, overall: {} }
+  stats = { masters: {}, proxies: {}, qualities: {}, overall: {} }
+
+  # get masters
+  JsonData.servers('master').each do |server|
+    stats[:masters][server] = {}
+    stats[:masters][server][:active] = JsonData.server_active?(server)
+    stats[:masters][server][:online] = JsonData.online_count_by_server(server, 'master')
+    stats[:masters][server][:total] = JsonData.created_by_server(server, 'master').count
+  end
 
   # get clients online by server
   JsonData.servers.each do |proxy|
@@ -68,7 +76,6 @@ get '/api/stats/qualities' do
   stats = generate_stats_array(JsonData.qualities, 'name', params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end
-
 
 # Debug frontpage
 get '/api/debug' do
