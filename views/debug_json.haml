@@ -12,6 +12,9 @@
         (filter: #{@filter})
     %p
       - Array(@data).each do |set|
+        %p
+          IP:
+          = set.ip
         - if set.respond_to? :data
           - if set.data['payload']['uniqueId']
             Stream uniqueId:
