@@ -6,22 +6,20 @@ class JsonData
   field :ip,   type: String
 
 
-  def self.created
-    where(
-      'data.payload.customData' => 'proxy',
-      'data.type' => 'outStreamCreated',
-    )
+  def self.created(type='proxy')
+    filter = { 'data.type' => 'outStreamCreated' }
+    filter['data.payload.customData'] = type if type
+    where(filter)
   end
 
-  def self.closed
-    where(
-      'data.payload.customData' => 'proxy',
-      'data.type' => 'outStreamClosed',
-    )
+  def self.closed(type='proxy')
+    filter = { 'data.type' => 'outStreamClosed' }
+    filter['data.payload.customData'] = type if type
+    where(filter)
   end
 
-  def self.online_count
-    created.count - closed.count
+  def self.online_count(type='proxy')
+    created(type).count - closed(type).count
   end
 
   def self.since(seconds=0)
@@ -29,20 +27,20 @@ class JsonData
     where(:created_at.gte => (Time.now - seconds))
   end
 
-  def self.servers
-    created.distinct('data.payload.nearIp')
+  def self.servers(type='proxy')
+    created(type).distinct('data.payload.nearIp')
   end
 
-  def self.created_by_server(server)
-    created.where('data.payload.nearIp' => server)
+  def self.created_by_server(server, type='proxy')
+    created(type).where('data.payload.nearIp' => server)
   end
 
-  def self.closed_by_server(server)
-    closed.where('data.payload.nearIp' => server)
+  def self.closed_by_server(server, type='proxy')
+    closed(type).where('data.payload.nearIp' => server)
   end
 
-  def self.online_count_by_server(server)
-    created_by_server(server).count - closed_by_server(server).count
+  def self.online_count_by_server(server, type='proxy')
+    created_by_server(server, type).count - closed_by_server(server, type).count
   end
 
   def self.server_active?(server)
