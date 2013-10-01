@@ -67,7 +67,7 @@ end
 
 # Retrieve history of connected users by server
 get '/api/stats/proxies' do
-  stats = generate_stats_array(JsonData.servers, 'nearIp', params[:timespan].to_i)
+  stats = generate_stats_array(JsonData.servers, :ip, params[:timespan].to_i)
   JSON.pretty_generate(stats)
 end
 

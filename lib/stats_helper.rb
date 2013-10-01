@@ -26,7 +26,9 @@ def generate_stats_array(elements, field, timespan=0)
 
       # In case the entry is concerning this element
       # increment/decrement counter accordingly
-      if event['data']['payload'][field] == element
+      field_to_check = event[field] || event['data']['payload'][field]
+
+      if field_to_check == element
         count += 1 if event['data']['type'] == 'outStreamCreated'
         count -= 1 if event['data']['type'] == 'outStreamClosed'
       end

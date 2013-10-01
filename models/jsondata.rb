@@ -30,15 +30,15 @@ class JsonData
   end
 
   def self.servers(type='proxy')
-    created(type).distinct('data.payload.nearIp')
+    created(type).distinct(:ip)
   end
 
   def self.created_by_server(server, type='proxy')
-    created(type).where('data.payload.nearIp' => server)
+    created(type).where(:ip => server)
   end
 
   def self.closed_by_server(server, type='proxy')
-    closed(type).where('data.payload.nearIp' => server)
+    closed(type).where(:ip => server)
   end
 
   def self.online_count_by_server(server, type='proxy')
@@ -78,7 +78,7 @@ class JsonData
   end
 
   def self.sort_by_server
-    asc('data.payload.nearIp')
+    asc(:ip)
   end
 
   def self.all_out_stream_by_timestamp
