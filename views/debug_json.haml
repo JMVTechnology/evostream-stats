@@ -14,6 +14,7 @@
       - Array(@data).each do |set|
         %p
         - if set.respond_to? :data
+          %b= set.ip
           - if set.data['payload']['uniqueId']
             Stream uniqueId:
             %a{href: "/api/debug/query?data.payload.uniqueId=#{set.data['payload']['uniqueId']}"}
