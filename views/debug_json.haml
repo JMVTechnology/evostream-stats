@@ -22,12 +22,6 @@
               = set.data['payload']['uniqueId']
             %br/
 
-          - if set.data['payload']['farIp']
-            Client address:
-            %a{href: "/api/debug/query?data.payload.farIp=#{set.data['payload']['farIp']}&data.payload.farPort=#{set.data['payload']['farPort']}" }
-              = "#{set.data['payload']['farIp']}:#{set.data['payload']['farPort']}"
-            %br/
-
           %div.debug
             %pre
               = preserve do
