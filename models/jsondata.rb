@@ -47,8 +47,7 @@ class JsonData
 
   def self.proxy_active?(proxy)
     count = where(
-      'data.payload.customData' => 'proxy',
-      'data.payload.nearIp' => proxy,
+      :ip => proxy,
       :created_at.gte => (Time.now - 30)
     ).count
 
