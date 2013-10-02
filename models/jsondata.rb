@@ -9,14 +9,14 @@ class JsonData
   def self.created(type='proxy')
     filter = { 'data.type' => 'outStreamCreated' }
     filter['data.payload.customData'] = type if type
-    filter['data.payload.type'] = 'ONR4R' if type == 'master'
+    filter['data.payload.type'] = 'ONR4R'
     where(filter)
   end
 
   def self.closed(type='proxy')
     filter = { 'data.type' => 'outStreamClosed' }
     filter['data.payload.customData'] = type if type
-    filter['data.payload.type'] = 'ONR4R' if type == 'master'
+    filter['data.payload.type'] = 'ONR4R'
     where(filter)
   end
 
@@ -82,7 +82,13 @@ class JsonData
   end
 
   def self.all_out_stream_by_timestamp
-    where('data.payload.customData' => 'proxy').any_of({ 'data.type' => 'outStreamCreated' }, { 'data.type' => 'outStreamClosed' }).asc('data.timestamp')
+    where(
+      'data.payload.customData' => 'proxy',
+      'data.payload.type' => 'ONR4R',
+    ).any_of(
+      { 'data.type' => 'outStreamCreated' },
+      { 'data.type' => 'outStreamClosed' },
+    ).asc('data.timestamp')
   end
 
 
