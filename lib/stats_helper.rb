@@ -9,7 +9,7 @@
 # ]
 def generate_stats_array(elements, field, timespan=0)
   stats = []
-  events = JsonData.since(timespan).all_out_stream_by_timestamp
+  events = JsonData.all_out_stream_by_timestamp
 
   h = {}
   events.each do |event|
@@ -34,16 +34,29 @@ def generate_stats_array(elements, field, timespan=0)
       end
 
       if h[element]
+        # Add new timestamp, unless this timestamp already exists
         h[element] << [ timestamp, count ] unless h[element].last[0] == timestamp
       else
+        # Create a new array with the current series if element is empty
         h[element] = [[ timestamp, count ]]
       end
     end
   end
 
-  # Add current timestamp with the same value as the last event
   now = Time.now.to_i * 1000
-  elements.each { |element| h[element] << [ now, h[element].last[1] ] }
+  elements.each do |element|
+    # Remove data that doesn't match the selected timespan
+    h[element].delete_if { |a| a[0] < now - timespan * 1000 } if timespan > 0
+
+    # Delete this element if no data is left
+    if h[element].empty?
+      h.delete(element)
+
+    # Otherwise, add current timestamp with the same value as the last event
+    else
+      h[element] << [ now, h[element].last[1] ]
+    end
+  end
 
   # Convert hash to stats array
   h.each { |element, values| stats << { key: element, values: values } }
