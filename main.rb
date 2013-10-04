@@ -34,7 +34,7 @@ end
 get '/api/online' do
   stats = { masters: {}, proxies: {}, qualities: {}, overall: {} }
 
-  # get masters
+  # Get masters
   JsonData.servers('master').each do |server|
     stats[:masters][server] = {}
     stats[:masters][server][:active] = JsonData.server_active?(server)
@@ -42,7 +42,7 @@ get '/api/online' do
     stats[:masters][server][:total] = JsonData.created_by_server(server, 'master').count
   end
 
-  # get clients online by server
+  # Get clients online by server
   JsonData.servers.each do |proxy|
     stats[:proxies][proxy] = {}
     stats[:proxies][proxy][:active] = JsonData.server_active?(proxy)
@@ -50,17 +50,17 @@ get '/api/online' do
     stats[:proxies][proxy][:total] = JsonData.created_by_server(proxy).count
   end
 
-  # get clients online by quality
+  # Get clients online by quality
   JsonData.qualities.each do |quality|
     stats[:qualities][quality] = {}
     stats[:qualities][quality][:online] = JsonData.online_count_by_quality(quality)
     stats[:qualities][quality][:total] = JsonData.created_by_quality(quality).count
   end
 
-  # get total clients online
   stats[:overall][:viewers] = {}
   stats[:overall][:viewers][:online] = JsonData.online_count
   stats[:overall][:viewers][:total] = JsonData.created.count
+  # Get total clients online
 
   JSON.pretty_generate(stats)
 end
