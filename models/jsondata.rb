@@ -30,7 +30,9 @@ class JsonData
   end
 
   def self.servers(type='proxy')
-    created(type).distinct(:ip)
+    filter = {}
+    filter['data.payload.customData'] = type if type
+    where(filter).distinct(:ip)
   end
 
   def self.created_by_server(server, type='proxy')
