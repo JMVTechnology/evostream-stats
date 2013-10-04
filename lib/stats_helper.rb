@@ -49,16 +49,28 @@ def generate_stats_array(elements, field, timespan=0)
 
   now = Time.now.to_i * 1000
   elements.each do |element|
-    # Remove data that doesn't match the selected timespan
-    h[element].delete_if { |a| a[0] < now - timespan * 1000 } if timespan > 0
+    # Add current timestamp with the same value as the last event
+    h[element] << [ now, h[element].last[1] ]
 
-    # Delete this element if no data is left
-    if h[element].empty?
-      h.delete(element)
+    # If only a specific timespan is requested
+    if timespan > 0
 
-    # Otherwise, add current timestamp with the same value as the last event
-    else
-      h[element] << [ now, h[element].last[1] ]
+      # Collect data that matches the selected timespan
+      data_in_timespan = []
+      while h[element].last and h[element].last[0] > now - timespan * 1000
+        data_in_timespan.unshift(h[element].pop)
+      end
+
+      # Get latest data to prepend to the beginning of the graph
+      # If no data is left, use 0
+      last = h[element].last ? h[element].last[1] : 0
+
+      # Add last entry again, so we get a stairs effect
+      data_in_timespan.unshift [ data_in_timespan.first[0] - 1, last ]
+      data_in_timespan.unshift [ now - timespan * 1000, last ]
+
+      # Update series
+      h[element] = data_in_timespan
     end
   end
 
