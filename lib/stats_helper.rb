@@ -35,7 +35,11 @@ def generate_stats_array(elements, field, timespan=0)
 
       if h[element]
         # Add new timestamp, unless this timestamp already exists
-        h[element] << [ timestamp, count ] unless h[element].last[0] == timestamp
+        unless h[element].last[0] == timestamp
+          # Add last entry again, so we get a stairs effect
+          h[element] << [ timestamp - 1, h[element].last[1] ] unless h[element].empty?
+          h[element] << [ timestamp, count ]
+        end
       else
         # Create a new array with the current series if element is empty
         h[element] = [[ timestamp, count ]]
