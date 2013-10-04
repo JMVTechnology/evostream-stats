@@ -41,6 +41,10 @@ def generate_stats_array(elements, field, timespan=0)
     end
   end
 
+  # Add current timestamp with the same value as the last event
+  now = Time.now.to_i * 1000
+  elements.each { |element| h[element] << [ now, h[element].last[1] ] }
+
   # Convert hash to stats array
   h.each { |element, values| stats << { key: element, values: values } }
   stats
