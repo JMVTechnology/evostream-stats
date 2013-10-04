@@ -32,35 +32,45 @@ end
 #   "total": 4
 # }
 get '/api/online' do
-  stats = { masters: {}, proxies: {}, qualities: {}, overall: {} }
+  stats = { masters: [], proxies: [], qualities: [], overall: [] }
 
   # Get masters
   JsonData.servers('master').each do |server|
-    stats[:masters][server] = {}
-    stats[:masters][server][:active] = JsonData.server_active?(server)
-    stats[:masters][server][:online] = JsonData.online_count_by_server(server, 'master')
-    stats[:masters][server][:total] = JsonData.created_by_server(server, 'master').count
+    stats[:masters] << {
+      name:   server,
+      active: JsonData.server_active?(server),
+      online: JsonData.online_count_by_server(server, 'master'),
+      total:  JsonData.created_by_server(server, 'master').count,
+    }
   end
 
   # Get clients online by server
   JsonData.servers.each do |proxy|
-    stats[:proxies][proxy] = {}
-    stats[:proxies][proxy][:active] = JsonData.server_active?(proxy)
-    stats[:proxies][proxy][:online] = JsonData.online_count_by_server(proxy)
-    stats[:proxies][proxy][:total] = JsonData.created_by_server(proxy).count
+    stats[:proxies] << {
+      name:   proxy,
+      active: JsonData.server_active?(proxy),
+      online: JsonData.online_count_by_server(proxy),
+      total:  JsonData.created_by_server(proxy).count,
+    }
   end
 
   # Get clients online by quality
   JsonData.qualities.each do |quality|
-    stats[:qualities][quality] = {}
-    stats[:qualities][quality][:online] = JsonData.online_count_by_quality(quality)
-    stats[:qualities][quality][:total] = JsonData.created_by_quality(quality).count
+    stats[:qualities] << {
+      name:   quality,
+      active: true,
+      online: JsonData.online_count_by_quality(quality),
+      total:  JsonData.created_by_quality(quality).count,
+    }
   end
 
-  stats[:overall][:viewers] = {}
-  stats[:overall][:viewers][:online] = JsonData.online_count
-  stats[:overall][:viewers][:total] = JsonData.created.count
   # Get total clients online
+  stats[:overall] << {
+    name:   'viewers',
+    active: true,
+    online: JsonData.online_count,
+    total:  JsonData.created.count,
+  }
 
   JSON.pretty_generate(stats)
 end
