@@ -1,5 +1,5 @@
 !!!
-%html
+%html{'ng-app' => ''}
   %head
     %meta{charset: 'utf-8'}/
     %title Dashboard sublan.tv
@@ -46,28 +46,34 @@
         %div.col-md-12
           %svg#chart-qualities
 
+      %div{'ng-controller' => 'TextStatsCtrl'}
+        :javascript
+          poll(5000);
 
-      %ul{class: 'nav nav-tabs'}
-        %li.active
-          %a{href: '#stats-online', 'data-toggle' => 'tab', onclick: 'updateTextStats("online");'} Online
-        %li
-          %a{href: '#stats-total', 'data-toggle' => 'tab', onclick: 'updateTextStats("total");'} Total
+        %ul{class: 'nav nav-tabs'}
+          %li.active
+            %a{href: '#stats-online', 'data-toggle' => 'tab', 'ng-click' => "setWhat('online')"}
+              Online
+          %li
+            %a{href: '#stats-total', 'data-toggle' => 'tab', 'ng-click' => "setWhat('total')"}
+              Total
 
-      %div.tab-content
-        %div.col-md-12
-          %h3#stats-title Connection Overview (online)
-        %div.row
-          %div.col-md-3
-            %div#stats-overall
-          %div.col-md-3
-            %div#stats-masters
-          %div.col-md-3
-            %div#stats-proxies
-          %div.col-md-3
-            %div#stats-qualities
+        %div.tab-content
+          %div.col-md-12
+            %h3#stats-title Connection Overview ({{what}})
+          %div.row
+            %div.col-md-3{'ng-repeat' => '(section, element) in stats'}
+              %div{class: 'panel panel-default'}
+                %div.panel-heading
+                  %b {{section}}
+                %table{class: 'table table-striped'}
+                  %tr{'ng-repeat' => 'data in element'}
+                    %td{class: '{{getActiveClass(data.active)}}'}
+                      %span{class: 'badge pull-right'} {{data[what]}}
+                      {{data.name}}
 
     %script{src: '/javascripts/jquery.min.js'}
-    %script{src: '/javascripts/handlebars.js'}
+    %script{src: '/javascripts/angular.min.js'}
     %script{src: '/javascripts/bootstrap.min.js'}
     %script{src: '/javascripts/nvd3/d3.v3.min.js'}
     %script{src: '/javascripts/nvd3/nv.d3.min.js'}
@@ -80,32 +86,12 @@
     %script{src: '/javascripts/nvd3/models/stackedArea.js'}
     %script{src: '/javascripts/nvd3/models/stackedAreaChart.js'}
     %script{src: '/javascripts/StackedAreaChart.js'}
-    %script{src: '/javascripts/TextStats.js'}
-
-    / Handlebar templates
-    %script{id: 'online-stats-header-template', type: 'text/x-handlebars-template'}
-      %div{class: 'panel panel-default'}
-        %div.panel-heading
-          %b {{title}}
-        %table{class: 'table table-striped'}
-          {{{list}}}
-
-    %script{id: 'online-stats-li-template', type: 'text/x-handlebars-template'}
-      %tr
-        %td{class: '{{klass}}'}
-          %span{class: 'badge pull-right'} {{value}}
-          {{key}}
-
-
+    %script{src: '/javascripts/textStats.js'}
 
     :javascript
-      // compile handlebar templates
-      var onlineStatsHeaderTemplate = Handlebars.compile($('#online-stats-header-template').html());
-      var onlineStatsLiTemplate = Handlebars.compile($('#online-stats-li-template').html());
 
       var chartProxy = new StackedAreaChart('proxies', 5000);
       var chartQuality = new StackedAreaChart('qualities', 5000);
-      var textStats = new TextStats('online', 5000);
 
       $('#freeze-btn').click(function () {
         chartProxy.toggleFreeze();
@@ -121,9 +107,4 @@
           $('#current-timespan').html('all');
         else
           $('#current-timespan').html(timespan / 60 + 'min');
-      }
-
-      function updateTextStats(what) {
-        $('#stats-title').html('Connection Overview (' + what + ')');
-        textStats.setWhat(what);
       }

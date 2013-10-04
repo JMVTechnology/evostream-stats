@@ -1,50 +1,38 @@
-var TextStats = function(what, interval) {
-  var timeout;
+function TextStatsCtrl($scope, $http, $timeout) {
+  $scope.stats = [];
+  $scope.what = 'online';
+  $scope.interval = 5000;
+  var t;
 
-  var update = function() {
-    $.ajax({
-      url: '/api/online',
-      type: 'GET',
-      dataType: 'json',
-      success: function(data) {
+  var poll = function() {
+    function again() {
+      $timeout.cancel(t);
+      t = $timeout(function() {
+            poll($scope.interval)
+          }, $scope.interval);
+    }
 
-        $.each(data, function(title, section) {
-          var list = ''
-
-          $.each(section, function(name, stats) {
-            if (stats['active'] == false)
-              klass = 'danger';
-            else
-              klass = 'success';
-
-            // templates are defined outside of class
-            list += onlineStatsLiTemplate({key: name, value: stats[what], klass: klass});
-          });
-
-          var html = onlineStatsHeaderTemplate({title: title, list: list})
-          $('#stats-' + title).html(html);
-        });
-      },
-      complete: function() {
-        clearTimeout(timeout);
-        timeout = setTimeout(update, interval);
-      },
-    });
+    $http.get('/api/online').
+      success(function(data) {
+        $scope.stats = data;
+        again();
+      }).
+      error(again);
   }
 
-  var setWhat = function(that) {
-    what = that;
-    update();
+  $scope.setWhat = function(what) {
+    $scope.what = what;
   }
 
-  var initialize = function() {
-    update();
+  $scope.setInterval = function(interval) {
+    $scope.interval = interval;
   }
 
-  initialize();
+  $scope.getActiveClass = function(active) {
+    if (active == true)
+      return 'success';
 
-  return {
-    update: update,
-    setWhat: setWhat,
+    return 'danger';
   }
+  poll();
 }
