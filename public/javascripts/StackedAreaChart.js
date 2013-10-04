@@ -9,8 +9,7 @@ var StackedAreaChart = function(name, interval) {
   var keyColor = function(d, i) {return colors(d.key)};
 
   var createChart = function() {
-    chart = nv.models.stackedAreaChart()
-              .useInteractiveGuideline(true)
+    chart = nv.models.multiBarChart()
               .x(function(d) { return d[0] })
               .y(function(d) { return d[1] })
               .color(keyColor)
