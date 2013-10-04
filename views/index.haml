@@ -10,67 +10,62 @@
   %body.with-3d-shadow.with-transitions
     %div.container
       %div.row
-        %div.col-md-12
-          %div.btn-group
-            %button#freeze-btn{class: 'btn btn-default', 'data-toggle' => 'button'} Freeze Charts
-            %div.btn-group
-              %button{class: 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown'}
-                Show data:
-                %span#current-timespan all
-                %span.caret
-              %ul.dropdown-menu
-                %li
-                  %a{href: '#', onclick: 'setTimespan(60)'} 1min
-                %li
-                  %a{href: '#', onclick: 'setTimespan(300)'} 5min
-                %li
-                  %a{href: '#', onclick: 'setTimespan(600)'} 10min
-                %li
-                  %a{href: '#', onclick: 'setTimespan(1800)'} 30min
-                %li
-                  %a{href: '#', onclick: 'setTimespan(3600)'} 60min
-                %li.divider
-                %li
-                  %a{href: '#', onclick: 'setTimespan(0)'} all
+        %div.col-md-2
+          %div{'ng-controller' => 'TextStatsCtrl'}
+            %ul{class: 'nav nav-tabs'}
+              %li.active
+                %a{href: '#stats-online', 'data-toggle' => 'tab', 'ng-click' => "setWhat('online')"}
+                  Online
+              %li
+                %a{href: '#stats-total', 'data-toggle' => 'tab', 'ng-click' => "setWhat('total')"}
+                  Total
 
-      %div.row
-        %div.col-md-12
-          %h3 Connections by Proxy
-      %div.row
-        %div.col-md-12
-          %svg#chart-proxies
-      %div.row
-        %div.col-md-12
-          %h3  Connections by Quality
-      %div.row
-        %div.col-md-12
-          %svg#chart-qualities
+            %div.tab-content
+              %div.row
+                %p
+                %div{'ng-repeat' => '(section, element) in stats'}
+                  %div.row{class: 'panel panel-default'}
+                    %div.panel-heading
+                      %b {{section}}
+                    %table{class: 'table table-striped'}
+                      %tr{'ng-repeat' => 'data in element'}
+                        %td{class: '{{getActiveClass(data.active)}}'}
+                          %span{class: 'badge pull-right'} {{data[what]}}
+                          {{data.name}}
 
-      %div{'ng-controller' => 'TextStatsCtrl'}
-        :javascript
-          poll(5000);
-
-        %ul{class: 'nav nav-tabs'}
-          %li.active
-            %a{href: '#stats-online', 'data-toggle' => 'tab', 'ng-click' => "setWhat('online')"}
-              Online
-          %li
-            %a{href: '#stats-total', 'data-toggle' => 'tab', 'ng-click' => "setWhat('total')"}
-              Total
-
-        %div.tab-content
-          %div.col-md-12
-            %h3#stats-title Connection Overview ({{what}})
+        %div.col-md-1
+        %div.col-md-9
           %div.row
-            %div.col-md-3{'ng-repeat' => '(section, element) in stats'}
-              %div{class: 'panel panel-default'}
-                %div.panel-heading
-                  %b {{section}}
-                %table{class: 'table table-striped'}
-                  %tr{'ng-repeat' => 'data in element'}
-                    %td{class: '{{getActiveClass(data.active)}}'}
-                      %span{class: 'badge pull-right'} {{data[what]}}
-                      {{data.name}}
+            %div.btn-group
+              %button#freeze-btn{class: 'btn btn-default', 'data-toggle' => 'button'} Freeze Charts
+              %div.btn-group
+                %button{class: 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown'}
+                  Show data:
+                  %span#current-timespan all
+                  %span.caret
+                %ul.dropdown-menu
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(60)'} 1min
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(300)'} 5min
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(600)'} 10min
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(1800)'} 30min
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(3600)'} 60min
+                  %li.divider
+                  %li
+                    %a{href: '#', onclick: 'setTimespan(0)'} all
+
+          %div.row
+            %h3 Connections by Proxy
+          %div.row
+            %svg#chart-proxies
+          %div.row
+            %h3  Connections by Quality
+          %div.row
+            %svg#chart-qualities
 
     %script{src: '/javascripts/jquery.min.js'}
     %script{src: '/javascripts/angular.min.js'}
