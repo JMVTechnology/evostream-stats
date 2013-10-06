@@ -49,6 +49,9 @@ def generate_stats_array(elements, field, timespan=0)
 
   now = Time.now.to_i * 1000
   elements.each do |element|
+    # Skip if no data is available
+    next unless h[element]
+
     # Add current timestamp with the same value as the last event
     h[element] << [ now, h[element].last[1] ]
 
