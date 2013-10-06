@@ -7,16 +7,20 @@ class JsonData
 
 
   def self.created(type='proxy')
-    filter = { 'data.type' => 'outStreamCreated' }
-    filter['data.payload.customData'] = type if type
+    filter = {}
+    filter['data.type'] = 'outStreamCreated'
     filter['data.payload.type'] = 'ONR4R'
+    filter['data.payload.customData'] = type if type
+
     where(filter)
   end
 
   def self.closed(type='proxy')
-    filter = { 'data.type' => 'outStreamClosed' }
-    filter['data.payload.customData'] = type if type
+    filter = {}
+    filter['data.type'] = 'outStreamClosed'
     filter['data.payload.type'] = 'ONR4R'
+    filter['data.payload.customData'] = type if type
+
     where(filter)
   end
 
