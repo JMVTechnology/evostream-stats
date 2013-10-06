@@ -33,13 +33,13 @@ def generate_stats_array(elements, field, timespan=0)
         count -= 1 if event['data']['type'] == 'outStreamClosed'
       end
 
-      if h[element]
-        # Add last entry again, so we get a stairs effect
-        h[element] << [ timestamp - 1, h[element].last[1] ] unless h[element].empty?
-        h[element] << [ timestamp, count ]
-      else
-        # Create a new array with the current series if element is empty
+      # Create a new array with the current series if element is empty
+      if h[element].nil? or h[element].empty?
         h[element] = [[ timestamp, count ]]
+      else
+        # Add last entry again, so we get a stairs effect
+        h[element] << [ timestamp - 1, h[element].last[1] ]
+        h[element] << [ timestamp, count ]
       end
     end
   end
