@@ -49,11 +49,11 @@ def generate_stats_array(elements, field, timespan=0)
     # Skip if no data is available
     next unless h[element]
 
-    # Add current timestamp with the same value as the last event
-    h[element] << [ now, h[element].last[1] ]
-
     # If only a specific timespan is requested
     if timespan > 0
+
+      # Add current timestamp with the same value as the last event
+      h[element] << [ now, h[element].last[1] ]
 
       # Collect data that matches the selected timespan
       data_in_timespan = []
